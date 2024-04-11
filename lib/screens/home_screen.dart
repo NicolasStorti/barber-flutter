@@ -3,7 +3,6 @@ import 'package:barbearia/components/list_agendamento.dart';
 import 'package:barbearia/services/agendamento_services.dart';
 import 'package:barbearia/services/auth_services.dart';
 import 'package:barbearia/components/modal_agendamento.dart';
-import 'package:barbearia/screens/agendamento_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -24,8 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange,
       appBar: AppBar(
-        title: Text('Meus Agendamentos'),
+        title: Text(
+            'Meus Agendamentos',
+          style: TextStyle(fontSize: 16),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -59,34 +62,37 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: StreamBuilder(
-        stream: services.connectStreamAgendamento(isDecrescente),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            if (snapshot.hasData &&
-                snapshot.data != null &&
-                snapshot.data!.docs.isNotEmpty) {
-              List<Agendamento> listaAgendamento = [];
-              for (var doc in snapshot.data!.docs) {
-                listaAgendamento.add(Agendamento.fromMap(doc.data()));
-              }
-              return ListView(
-                children: List.generate(listaAgendamento.length, (index) {
-                  Agendamento agendamento = listaAgendamento[index];
-                  return ListAgendamento(agendamento: agendamento, services: services);
-                }),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: StreamBuilder(
+          stream: services.connectStreamAgendamento(isDecrescente),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
               );
             } else {
-              return Center(
-                child: Text("Nenhum Agendamento Encontrado!"),
-              );
+              if (snapshot.hasData &&
+                  snapshot.data != null &&
+                  snapshot.data!.docs.isNotEmpty) {
+                List<Agendamento> listaAgendamento = [];
+                for (var doc in snapshot.data!.docs) {
+                  listaAgendamento.add(Agendamento.fromMap(doc.data()));
+                }
+                return ListView(
+                  children: List.generate(listaAgendamento.length, (index) {
+                    Agendamento agendamento = listaAgendamento[index];
+                    return ListAgendamento(agendamento: agendamento, services: services);
+                  }),
+                );
+              } else {
+                return Center(
+                  child: Text("Nenhum Agendamento Encontrado!"),
+                );
+              }
             }
-          }
-        },
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),

@@ -30,9 +30,9 @@ class ListAgendamento extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               blurRadius: 3,
-              color: Colors.black.withAlpha(100),
+              color: Colors.black.withAlpha(125),
               spreadRadius: 1,
-              offset: Offset(1, 1),
+              offset: Offset(2, 2),
             )
           ],
           borderRadius: BorderRadius.circular(22),
@@ -46,7 +46,9 @@ class ListAgendamento extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.orange[200],
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(22), bottomRight: Radius.circular(22)),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(22),
+                      bottomRight: Radius.circular(22)),
                 ),
                 height: 40,
                 width: 300,
@@ -55,9 +57,7 @@ class ListAgendamento extends StatelessWidget {
                     "Data: ${agendamento.data} - Hora: ${agendamento.hora}",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
               ),
@@ -70,14 +70,12 @@ class ListAgendamento extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width:200,
+                        width: 200,
                         child: Text(
-                            agendamento.servico,
+                          agendamento.servico,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold
-                          ),
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Row(
@@ -104,12 +102,28 @@ class ListAgendamento extends StatelessWidget {
                                   },
                                 ),
                               );
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
                             },
-                            icon: Icon(Icons.delete),
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
                           ),
                         ],
                       ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: Text(
+                          "Barbeiro: ${agendamento.barbeiro}",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      )
                     ],
                   )
                 ],
@@ -118,4 +132,6 @@ class ListAgendamento extends StatelessWidget {
           ],
         ),
       ),
-  );}}
+    );
+  }
+}
