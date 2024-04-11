@@ -1,4 +1,5 @@
 import 'package:barbearia/components/agendamento.dart';
+import 'package:barbearia/components/list_agendamento.dart';
 import 'package:barbearia/services/agendamento_services.dart';
 import 'package:barbearia/services/auth_services.dart';
 import 'package:barbearia/components/modal_agendamento.dart';
@@ -76,51 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return ListView(
                 children: List.generate(listaAgendamento.length, (index) {
                   Agendamento agendamento = listaAgendamento[index];
-                  return ListTile(
-                    title: Text(agendamento.servico),
-                    subtitle: Text(
-                        "Hora: ${agendamento.hora} - Data: ${agendamento.data}"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            ShowModalAgendamento(context,
-                                agendamento: agendamento);
-                          },
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            SnackBar snackBar = SnackBar(
-                              content: Text(
-                                  "Deseja remover o agendamento de ${agendamento.servico}?"),
-                              action: SnackBarAction(
-                                label: "Remover",
-                                textColor: Colors.white,
-                                onPressed: () {
-                                  services.removerAgendamento(
-                                      idAgendamento: agendamento.id);
-                                },
-                              ),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          },
-                          icon: Icon(Icons.delete),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AgendamentoScreen(
-                            agendamento: agendamento,
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                  return ListAgendamento(agendamento: agendamento, services: services);
                 }),
               );
             } else {
