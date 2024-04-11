@@ -18,11 +18,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final AgendamentoServices services = AgendamentoServices();
 
+  bool isDecrescente = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Meus Agendamentos'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isDecrescente = !isDecrescente;
+              });
+            },
+            icon: Icon(Icons.sort_by_alpha_rounded),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -47,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: StreamBuilder(
-        stream: services.connectStreamAgendamento(),
+        stream: services.connectStreamAgendamento(isDecrescente),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -68,9 +80,36 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(agendamento.servico),
                     subtitle: Text(
                         "Hora: ${agendamento.hora} - Data: ${agendamento.data}"),
-                    trailing: IconButton(icon: Icon(Icons.edit), onPressed: (){
-                      ShowModalAgendamento(context, agendamento: agendamento);
-                    },),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            ShowModalAgendamento(context,
+                                agendamento: agendamento);
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            SnackBar snackBar = SnackBar(
+                              content: Text(
+                                  "Deseja remover o agendamento de ${agendamento.servico}?"),
+                              action: SnackBarAction(
+                                label: "Remover",
+                                textColor: Colors.white,
+                                onPressed: () {
+                                  services.removerAgendamento(
+                                      idAgendamento: agendamento.id);
+                                },
+                              ),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          },
+                          icon: Icon(Icons.delete),
+                        ),
+                      ],
+                    ),
                     onTap: () {
                       Navigator.push(
                         context,

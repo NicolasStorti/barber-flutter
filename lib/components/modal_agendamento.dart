@@ -18,8 +18,15 @@ ShowModalAgendamento(BuildContext context, {Agendamento? agendamento}) {
         ),
       ),
       builder: (context) {
-        return AgendamentoModal(
-          agendamento: agendamento,
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: AgendamentoModal(
+              agendamento: agendamento,
+            ),
+          ),
         );
       });
 }
@@ -85,140 +92,142 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(32),
-      height: MediaQuery.of(context).size.height * 0.9,
-      child: Form(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        (widget.agendamento != null)
-                            ? "Editar ${widget.agendamento!.servico}"
-                            : "Agendar um Horário",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(32),
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: Form(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          (widget.agendamento != null)
+                              ? "Editar ${widget.agendamento!.servico}"
+                              : "Agendar um Horário",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close))
-                  ],
-                ),
-                Divider(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: _barbeiroController,
-                      decoration: InputDecoration(
-                          labelText: 'Barbeiro', border: OutlineInputBorder()),
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    TextFormField(
-                      controller: _servicoController,
-                      decoration: InputDecoration(
-                          labelText: 'Serviço', border: OutlineInputBorder()),
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _dataController,
-                            decoration: InputDecoration(
-                              labelText: 'Data',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.calendar_today),
-                          onPressed: () => _selectDate(context),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _horaController,
-                            decoration: InputDecoration(
-                              labelText: 'Hora',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.access_time),
-                          onPressed: () => _selectTime(context),
-                        ),
-                      ],
-                    ),
-                    Visibility(
-                      visible: (widget.agendamento == null),
-                      child: Column(
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.close))
+                    ],
+                  ),
+                  Divider(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: _barbeiroController,
+                        decoration: InputDecoration(
+                            labelText: 'Barbeiro', border: OutlineInputBorder()),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      TextFormField(
+                        controller: _servicoController,
+                        decoration: InputDecoration(
+                            labelText: 'Serviço', border: OutlineInputBorder()),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
                         children: [
-                          SizedBox(
-                            height: 25,
+                          Expanded(
+                            child: TextFormField(
+                              controller: _dataController,
+                              decoration: InputDecoration(
+                                labelText: 'Data',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
                           ),
-                          TextFormField(
-                            controller: _comentarioController,
-                            decoration: InputDecoration(
-                                labelText: 'Comentario',
-                                border: OutlineInputBorder()),
-                          ),
-                          Text(
-                            "Não é necessario comentar agora!",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 12),
+                          IconButton(
+                            icon: Icon(Icons.calendar_today),
+                            onPressed: () => _selectDate(context),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () {
-                agendarHorario();
-              },
-              child: (isCarregando)
-                  ? SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(
-                        color: Colors.black,
+                      SizedBox(
+                        height: 25,
                       ),
-                    )
-                  : Text((widget.agendamento != null)
-                      ? "Editar Agendamento"
-                      : "Agendar"),
-            ),
-          ],
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _horaController,
+                              decoration: InputDecoration(
+                                labelText: 'Hora',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.access_time),
+                            onPressed: () => _selectTime(context),
+                          ),
+                        ],
+                      ),
+                      Visibility(
+                        visible: (widget.agendamento == null),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 25,
+                            ),
+                            TextFormField(
+                              controller: _comentarioController,
+                              decoration: InputDecoration(
+                                  labelText: 'Comentario',
+                                  border: OutlineInputBorder()),
+                            ),
+                            Text(
+                              "Não é necessario comentar agora!",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  agendarHorario();
+                },
+                child: (isCarregando)
+                    ? SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
+                      )
+                    : Text((widget.agendamento != null)
+                        ? "Editar Agendamento"
+                        : "Agendar"),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -231,38 +240,68 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
     String hora = _horaController.text;
     String comentario = _comentarioController.text;
 
-    Agendamento agendamento = Agendamento(
-      id: Uuid().v1(),
-      servico: servico,
-      barbeiro: barbeiro,
-      data: data,
-      hora: hora,
-    );
-
     setState(() {
       isCarregando = true;
     });
 
-    _agendamentoServices.addAgendamento(agendamento).then((value) {
-      if (comentario != "") {
-        Comentario comentarioObj = Comentario(
-          id: Uuid().v1(),
-          comentario: comentario,
-          data: DateTime.now().toString(),
-        );
-        if(widget.agendamento != null){
-          agendamento.id = widget.agendamento!.id;
-        }
-        _agendamentoServices.AddComentario(agendamento.id, comentarioObj)
-            .then((value) {
+    if (widget.agendamento != null) {
+      widget.agendamento!.servico = servico;
+      widget.agendamento!.barbeiro = barbeiro;
+      widget.agendamento!.data = data;
+      widget.agendamento!.hora = hora;
+
+      _agendamentoServices.addAgendamento(widget.agendamento!).then((value) {
+        if (comentario.isNotEmpty) {
+          Comentario comentarioObj = Comentario(
+            id: Uuid().v1(),
+            comentario: comentario,
+            data: DateTime.now().toString(),
+          );
+          _agendamentoServices.AddComentario(widget.agendamento!.id, comentarioObj)
+              .then((value) {
+            setState(() {
+              isCarregando = false;
+            });
+            Navigator.pop(context);
+          });
+        } else {
           setState(() {
             isCarregando = false;
           });
           Navigator.pop(context);
-        });
-      } else {
-        Navigator.pop(context);
-      }
-    });
+        }
+      });
+    } else {
+      Agendamento agendamento = Agendamento(
+        id: Uuid().v1(),
+        servico: servico,
+        barbeiro: barbeiro,
+        data: data,
+        hora: hora,
+      );
+
+      _agendamentoServices.addAgendamento(agendamento).then((value) {
+        if (comentario.isNotEmpty) {
+          Comentario comentarioObj = Comentario(
+            id: Uuid().v1(),
+            comentario: comentario,
+            data: DateTime.now().toString(),
+          );
+          _agendamentoServices.AddComentario(agendamento.id, comentarioObj)
+              .then((value) {
+            setState(() {
+              isCarregando = false;
+            });
+            Navigator.pop(context);
+          });
+        } else {
+          setState(() {
+            isCarregando = false;
+          });
+          Navigator.pop(context);
+        }
+      });
+    }
   }
+
 }

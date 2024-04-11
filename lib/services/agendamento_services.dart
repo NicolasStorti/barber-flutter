@@ -27,7 +27,11 @@ class AgendamentoServices {
         .set(comentario.toMap());
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> connectStreamAgendamento(){
-    return _firestore.collection(userId).snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> connectStreamAgendamento(bool isDecrescente){
+    return _firestore.collection(userId).orderBy("servico", descending: isDecrescente).snapshots();
+  }
+
+  Future<void> removerAgendamento({required String idAgendamento}){
+    return _firestore.collection(userId).doc(idAgendamento).delete();
   }
 }
