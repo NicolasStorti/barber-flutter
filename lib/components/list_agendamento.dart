@@ -1,5 +1,5 @@
 import 'package:barbearia/components/agendamento.dart';
-import 'package:barbearia/components/modal_agendamento.dart';
+import 'package:barbearia/components/agendamento_modal.dart';
 import 'package:barbearia/screens/agendamento_screen.dart';
 import 'package:barbearia/services/agendamento_services.dart';
 import 'package:flutter/material.dart';
@@ -51,13 +51,13 @@ class ListAgendamento extends StatelessWidget {
                       bottomRight: Radius.circular(22)),
                 ),
                 height: 40,
-                width: 300,
+                width: 225,
                 child: Center(
                   child: Text(
                     "Data: ${agendamento.data} - Hora: ${agendamento.hora}",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ),
               ),
@@ -121,7 +121,7 @@ class ListAgendamento extends StatelessWidget {
                         child: Text(
                           "Barbeiro: ${agendamento.barbeiro}",
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
                         ),
                       )
                     ],

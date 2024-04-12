@@ -1,6 +1,5 @@
 import 'package:barbearia/components/snackbar.dart';
 import 'package:barbearia/services/auth_services.dart';
-import 'package:barbearia/screens/home_screen.dart';
 import 'package:barbearia/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 

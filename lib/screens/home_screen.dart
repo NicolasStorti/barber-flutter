@@ -2,7 +2,7 @@ import 'package:barbearia/components/agendamento.dart';
 import 'package:barbearia/components/list_agendamento.dart';
 import 'package:barbearia/services/agendamento_services.dart';
 import 'package:barbearia/services/auth_services.dart';
-import 'package:barbearia/components/modal_agendamento.dart';
+import 'package:barbearia/components/agendamento_modal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

@@ -1,6 +1,7 @@
 import 'package:barbearia/components/agendamento.dart';
 import 'package:barbearia/components/comentario.dart';
 import 'package:barbearia/services/agendamento_services.dart';
+import 'package:barbearia/services/comentario_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -257,7 +258,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
             comentario: comentario,
             data: DateTime.now().toString(),
           );
-          _agendamentoServices.AddComentario(widget.agendamento!.id, comentarioObj)
+          ComentarioServices().AddComentario(idAgendamento: widget.agendamento!.id, comentario: comentarioObj)
               .then((value) {
             setState(() {
               isCarregando = false;
@@ -287,7 +288,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
             comentario: comentario,
             data: DateTime.now().toString(),
           );
-          _agendamentoServices.AddComentario(agendamento.id, comentarioObj)
+          ComentarioServices().AddComentario(idAgendamento: agendamento.id, comentario: comentarioObj)
               .then((value) {
             setState(() {
               isCarregando = false;

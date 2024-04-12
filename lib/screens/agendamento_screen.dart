@@ -1,16 +1,15 @@
 import 'package:barbearia/components/agendamento.dart';
+import 'package:barbearia/components/comendario_dialog.dart';
 import 'package:barbearia/components/comentario.dart';
-import 'package:barbearia/screens/home_screen.dart';
+import 'package:barbearia/services/comentario_services.dart';
 import 'package:flutter/material.dart';
 
 class AgendamentoScreen extends StatelessWidget {
   final Agendamento agendamento;
+
   AgendamentoScreen({Key? key, required this.agendamento}) : super(key: key);
 
-  final List<Comentario> listaComentarios = [
-    Comentario(id: "01", comentario: "Muito bom", data: "20/10/2024"),
-    Comentario(id: "02", comentario: "Detalhes impecáveis", data: "20/10/2024"),
-  ];
+  ComentarioServices _comentarioServices = ComentarioServices();
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +28,20 @@ class AgendamentoScreen extends StatelessWidget {
           ],
         ),
         centerTitle: true,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(22),),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(22),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialogComentario(context, idAgendamento: agendamento.id);
+        },
         child: Icon(Icons.add),
       ),
       body: Container(
-        margin: EdgeInsets.all(8),
+        margin: EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -55,8 +60,9 @@ class AgendamentoScreen extends StatelessWidget {
                       child: Text("Enviar Foto"),
                     ),
                     ElevatedButton(
-                      onPressed: (){},
-                      child: Text("Tirar Foto"),),
+                      onPressed: () {},
+                      child: Text("Tirar Foto"),
+                    ),
                   ],
                 ),
               ),
@@ -106,26 +112,70 @@ class AgendamentoScreen extends StatelessWidget {
                   fontSize: 18,
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(listaComentarios.length, (index) {
-                  Comentario comentarioAgora = listaComentarios[index];
-                  return ListTile(
-                    dense: true,
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(comentarioAgora.comentario),
-                    subtitle: Text(comentarioAgora.data),
-                    leading: Icon(Icons.double_arrow),
-                    trailing: IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {},
-                    ),
-                  );
-                }),
-              ),
+              StreamBuilder(
+                  stream: _comentarioServices.connectStreamComentario(
+                      idAgendamento: agendamento.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      if (snapshot.hasData &&
+                          snapshot.data != null &&
+                          snapshot.data!.docs.isNotEmpty) {
+                        final List<Comentario> listaComentarios = [];
+
+                        for (var doc in snapshot.data!.docs) {
+                          listaComentarios.add(Comentario.fromMap(doc.data()));
+                        }
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:
+                              List.generate(listaComentarios.length, (index) {
+                            Comentario comentarioAgora =
+                                listaComentarios[index];
+                            return ListTile(
+                              dense: true,
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(comentarioAgora.comentario),
+                              subtitle: Text(comentarioAgora.data),
+                              leading: Icon(Icons.double_arrow),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      showDialogComentario(
+                                        context,
+                                        idAgendamento: agendamento.id,
+                                        comentario: comentarioAgora,
+                                      );
+                                    },
+                                    icon: Icon(Icons.edit),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      _comentarioServices.removerComentario(
+                                          agendamentoId: agendamento.id,
+                                          comentarioId: comentarioAgora.id);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        );
+                      } else {
+                        return Text("Nenhum Comentário!");
+                      }
+                    }
+                  })
             ],
           ),
         ),
