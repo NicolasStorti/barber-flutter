@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class AgendamentoScreen extends StatelessWidget {
   final Agendamento agendamento;
 
-  AgendamentoScreen({Key? key, required this.agendamento}) : super(key: key);
+  AgendamentoScreen({super.key, required this.agendamento});
 
   final ComentarioServices _comentarioServices = ComentarioServices();
 
@@ -20,7 +20,7 @@ class AgendamentoScreen extends StatelessWidget {
           children: [
             Text(
               agendamento.servico,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
               ),
@@ -28,7 +28,7 @@ class AgendamentoScreen extends StatelessWidget {
           ],
         ),
         centerTitle: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(22),
           ),
@@ -38,10 +38,10 @@ class AgendamentoScreen extends StatelessWidget {
         onPressed: () {
           showDialogComentario(context, idAgendamento: agendamento.id);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: Container(
-        margin: EdgeInsets.all(12),
+        margin: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -57,19 +57,19 @@ class AgendamentoScreen extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {},
-                      child: Text("Enviar Foto"),
+                      child: const Text("Enviar Foto"),
                     ),
                     ElevatedButton(
                       onPressed: () {},
-                      child: Text("Tirar Foto"),
+                      child: const Text("Tirar Foto"),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Barbeiro:",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -77,10 +77,10 @@ class AgendamentoScreen extends StatelessWidget {
                 ),
               ),
               Text(agendamento.barbeiro),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Data:",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -88,10 +88,10 @@ class AgendamentoScreen extends StatelessWidget {
                 ),
               ),
               Text(agendamento.data),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Hora:",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -99,13 +99,13 @@ class AgendamentoScreen extends StatelessWidget {
                 ),
               ),
               Text(agendamento.hora),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Divider(
                   color: Colors.black,
                 ),
               ),
-              Text(
+              const Text(
                 "Comentarios:",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -117,7 +117,7 @@ class AgendamentoScreen extends StatelessWidget {
                       idAgendamento: agendamento.id),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else {
@@ -141,7 +141,7 @@ class AgendamentoScreen extends StatelessWidget {
                               contentPadding: EdgeInsets.zero,
                               title: Text(comentarioAgora.comentario),
                               subtitle: Text(comentarioAgora.data),
-                              leading: Icon(Icons.double_arrow),
+                              leading: const Icon(Icons.double_arrow),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -153,10 +153,10 @@ class AgendamentoScreen extends StatelessWidget {
                                         comentario: comentarioAgora,
                                       );
                                     },
-                                    icon: Icon(Icons.edit),
+                                    icon: const Icon(Icons.edit),
                                   ),
                                   IconButton(
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ),
@@ -172,7 +172,7 @@ class AgendamentoScreen extends StatelessWidget {
                           }),
                         );
                       } else {
-                        return Text("Nenhum Comentário!");
+                        return const Text("Nenhum Comentário!");
                       }
                     }
                   })

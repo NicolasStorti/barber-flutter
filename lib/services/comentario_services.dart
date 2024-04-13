@@ -11,7 +11,7 @@ class ComentarioServices {
 
   static String comentarioKey = "comentarios";
 
-  Future<void> AddComentario(
+  Future<void> addComentario(
   {required String idAgendamento, required Comentario comentario}) async {
     return await _firestore
         .collection(userId)

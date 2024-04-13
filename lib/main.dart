@@ -14,7 +14,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
-      home: Roteador(),
+      home: const Roteador(),
     );
   }
 }
 
 class Roteador extends StatelessWidget {
-  const Roteador({Key? key});
+   const Roteador({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,11 @@ class Roteador extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasData) {
           return HomeScreen(user: snapshot.data!,);
         } else {
-          return LoginScreen();
+          return const LoginScreen();
         }
       },
     );

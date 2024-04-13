@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class HomeScreen extends StatefulWidget {
   final User user;
 
-  HomeScreen({super.key, required this.user});
+  const HomeScreen({super.key, required this.user});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.orange,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
             'Meus Agendamentos',
           style: TextStyle(fontSize: 16),
         ),
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 isDecrescente = !isDecrescente;
               });
             },
-            icon: Icon(Icons.compare_arrows_rounded),
+            icon: const Icon(Icons.compare_arrows_rounded),
           ),
         ],
       ),
@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
+              currentAccountPicture: const CircleAvatar(
                 backgroundImage: AssetImage("assets/perfil.jpg"),
               ),
               accountName: Text((widget.user.displayName != null)
@@ -53,10 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
               accountEmail: Text(widget.user.email!),
             ),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text("Sair"),
+              leading: const Icon(Icons.logout),
+              title: const Text("Sair"),
               onTap: () {
-                AuthServices().LogoutUser();
+                AuthServices().logoutUser();
               },
             )
           ],
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           stream: services.connectStreamAgendamento(isDecrescente),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else {
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: Text("Nenhum Agendamento Encontrado!"),
                 );
               }
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          ShowModalAgendamento(context);
+          showModalAgendamento(context);
         },
       ),
     );

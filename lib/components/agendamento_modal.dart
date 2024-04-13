@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
-ShowModalAgendamento(BuildContext context, {Agendamento? agendamento}) {
+showModalAgendamento(BuildContext context, {Agendamento? agendamento}) {
   showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       isDismissible: false,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(32),
         ),
@@ -41,15 +41,15 @@ class AgendamentoModal extends StatefulWidget {
 }
 
 class _AgendamentoModalState extends State<AgendamentoModal> {
-  TextEditingController _servicoController = TextEditingController();
-  TextEditingController _barbeiroController = TextEditingController();
-  TextEditingController _horaController = TextEditingController();
-  TextEditingController _dataController = TextEditingController();
-  TextEditingController _comentarioController = TextEditingController();
+  final TextEditingController _servicoController = TextEditingController();
+  final TextEditingController _barbeiroController = TextEditingController();
+  final TextEditingController _horaController = TextEditingController();
+  final TextEditingController _dataController = TextEditingController();
+  final TextEditingController _comentarioController = TextEditingController();
 
   bool isCarregando = false;
 
-  AgendamentoServices _agendamentoServices = AgendamentoServices();
+  final AgendamentoServices _agendamentoServices = AgendamentoServices();
 
   @override
   void initState() {
@@ -93,7 +93,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
         height: MediaQuery.of(context).size.height * 0.9,
         child: Form(
           child: Column(
@@ -112,7 +112,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                               ? "Editar ${widget.agendamento!.servico}"
                               : "Agendar um Horário",
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -120,31 +120,31 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          icon: Icon(Icons.close))
+                          icon: const Icon(Icons.close))
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
                         controller: _barbeiroController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Barbeiro', border: OutlineInputBorder()),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       TextFormField(
                         controller: _servicoController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Serviço', border: OutlineInputBorder()),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Row(
@@ -152,19 +152,19 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                           Expanded(
                             child: TextFormField(
                               controller: _dataController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Data',
                                 border: OutlineInputBorder(),
                               ),
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.calendar_today),
+                            icon: const Icon(Icons.calendar_today),
                             onPressed: () => _selectDate(context),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Row(
@@ -172,14 +172,14 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                           Expanded(
                             child: TextFormField(
                               controller: _horaController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Hora',
                                 border: OutlineInputBorder(),
                               ),
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.access_time),
+                            icon: const Icon(Icons.access_time),
                             onPressed: () => _selectTime(context),
                           ),
                         ],
@@ -188,16 +188,16 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                         visible: (widget.agendamento == null),
                         child: Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 25,
                             ),
                             TextFormField(
                               controller: _comentarioController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   labelText: 'Comentario',
                                   border: OutlineInputBorder()),
                             ),
-                            Text(
+                            const Text(
                               "Não é necessario comentar agora!",
                               textAlign: TextAlign.left,
                               style: TextStyle(fontSize: 12),
@@ -214,7 +214,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                   agendarHorario();
                 },
                 child: (isCarregando)
-                    ? SizedBox(
+                    ? const SizedBox(
                         height: 16,
                         width: 16,
                         child: CircularProgressIndicator(
@@ -252,11 +252,11 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
       _agendamentoServices.addAgendamento(widget.agendamento!).then((value) {
         if (comentario.isNotEmpty) {
           Comentario comentarioObj = Comentario(
-            id: Uuid().v1(),
+            id: const Uuid().v1(),
             comentario: comentario,
             data: DateTime.now().toString(),
           );
-          ComentarioServices().AddComentario(idAgendamento: widget.agendamento!.id, comentario: comentarioObj)
+          ComentarioServices().addComentario(idAgendamento: widget.agendamento!.id, comentario: comentarioObj)
               .then((value) {
             setState(() {
               isCarregando = false;
@@ -272,7 +272,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
       });
     } else {
       Agendamento agendamento = Agendamento(
-        id: Uuid().v1(),
+        id: const Uuid().v1(),
         servico: servico,
         barbeiro: barbeiro,
         data: data,
@@ -282,11 +282,11 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
       _agendamentoServices.addAgendamento(agendamento).then((value) {
         if (comentario.isNotEmpty) {
           Comentario comentarioObj = Comentario(
-            id: Uuid().v1(),
+            id: const Uuid().v1(),
             comentario: comentario,
-            data: DateTime.now().toString(),
-          );
-          ComentarioServices().AddComentario(idAgendamento: agendamento.id, comentario: comentarioObj)
+            data: DateFormat('dd MMMM yyyy').format(DateTime.now(),
+          ));
+          ComentarioServices().addComentario(idAgendamento: agendamento.id, comentario: comentarioObj)
               .then((value) {
             setState(() {
               isCarregando = false;

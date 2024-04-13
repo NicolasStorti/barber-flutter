@@ -6,9 +6,9 @@ showSnackbar({
 }) {
   SnackBar snackBar = SnackBar(
     content: Text(text),
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18))),
-    duration: Duration(seconds: 3),
+    duration: const Duration(seconds: 3),
     action: SnackBarAction(
         label: "Ok",
         textColor: Colors.white,

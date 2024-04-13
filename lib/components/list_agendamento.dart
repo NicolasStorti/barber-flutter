@@ -32,13 +32,13 @@ class ListAgendamento extends StatelessWidget {
               blurRadius: 3,
               color: Colors.black.withAlpha(125),
               spreadRadius: 1,
-              offset: Offset(2, 2),
+              offset: const Offset(2, 2),
             )
           ],
           borderRadius: BorderRadius.circular(22),
         ),
         height: 100,
-        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
         child: Stack(
           children: [
             Align(
@@ -46,7 +46,7 @@ class ListAgendamento extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.orange[200],
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(22),
                       bottomRight: Radius.circular(22)),
                 ),
@@ -57,13 +57,13 @@ class ListAgendamento extends StatelessWidget {
                     "Data: ${agendamento.data} - Hora: ${agendamento.hora}",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
               child: Column(
                 children: [
                   Row(
@@ -74,7 +74,7 @@ class ListAgendamento extends StatelessWidget {
                         child: Text(
                           agendamento.servico,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -82,9 +82,9 @@ class ListAgendamento extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             onPressed: () {
-                              ShowModalAgendamento(context,
+                              showModalAgendamento(context,
                                   agendamento: agendamento);
                             },
                           ),
@@ -105,7 +105,7 @@ class ListAgendamento extends StatelessWidget {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.delete,
                               color: Colors.red,
                             ),
@@ -121,7 +121,7 @@ class ListAgendamento extends StatelessWidget {
                         child: Text(
                           "Barbeiro: ${agendamento.barbeiro}",
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
+                          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
                         ),
                       )
                     ],

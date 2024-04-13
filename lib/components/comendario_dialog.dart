@@ -9,17 +9,17 @@ Future<dynamic> showDialogComentario(BuildContext context,
   return showDialog(
       context: context,
       builder: (context) {
-        TextEditingController _comentarioController = TextEditingController();
+        TextEditingController comentarioController = TextEditingController();
 
         if (comentario != null) {
-          _comentarioController.text = comentario.comentario;
+          comentarioController.text = comentario.comentario;
         }
 
         return AlertDialog(
-          title: Text("Comente agora sobre seu agendamento!"),
+          title: const Text("Comente agora sobre seu agendamento!"),
           content: TextFormField(
-            controller: _comentarioController,
-            decoration: InputDecoration(
+            controller: comentarioController,
+            decoration: const InputDecoration(
               label: Text("Comentário"),
               border: OutlineInputBorder(),
             ),
@@ -30,19 +30,19 @@ Future<dynamic> showDialogComentario(BuildContext context,
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
             ),
             ElevatedButton(
               onPressed: () {
-                String comentarioId = comentario?.id ?? Uuid().v1();
+                String comentarioId = comentario?.id ?? const Uuid().v1();
                 String comentarioData = DateFormat('dd MMMM yyyy').format(DateTime.now());
                 Comentario novoComentario = Comentario(
                   id: comentarioId,
-                  comentario: _comentarioController.text,
+                  comentario: comentarioController.text,
                   data: comentario?.data ?? comentarioData,
                 );
 
-                ComentarioServices().AddComentario(
+                ComentarioServices().addComentario(
                   idAgendamento: idAgendamento,
                   comentario: novoComentario,
                 );

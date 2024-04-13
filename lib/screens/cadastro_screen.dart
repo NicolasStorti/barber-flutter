@@ -4,10 +4,10 @@ import 'package:barbearia/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class CadastroScreen extends StatefulWidget {
-  const CadastroScreen({Key? key}) : super(key: key);
+  const CadastroScreen({super.key});
 
   @override
-  _CadastroScreenState createState() => _CadastroScreenState();
+  State<CadastroScreen> createState() => _CadastroScreenState();
 }
 
 class _CadastroScreenState extends State<CadastroScreen> {
@@ -17,17 +17,17 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
-  AuthServices _authUser = AuthServices();
+  final AuthServices _authUser = AuthServices();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro'),
+        title: const Text('Cadastro'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
           },
         ),
       ),
@@ -42,22 +42,22 @@ class _CadastroScreenState extends State<CadastroScreen> {
                 children: [
                   Container(
                     height: 130,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/logo.png'),
                         fit: BoxFit.contain,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Barber App',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _nomeController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Nome Completo',
                       border: OutlineInputBorder(),
                     ),
@@ -68,10 +68,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'E-mail',
                       border: OutlineInputBorder(),
                     ),
@@ -82,11 +82,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _senhaController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Senha',
                       border: OutlineInputBorder(),
                     ),
@@ -100,7 +100,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -123,7 +123,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         });
                       }
                     },
-                    child: Text('Cadastrar'),
+                    child: const Text('Cadastrar'),
                   ),
                 ],
               ),
