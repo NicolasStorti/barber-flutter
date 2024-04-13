@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 isDecrescente = !isDecrescente;
               });
             },
-            icon: Icon(Icons.sort_by_alpha_rounded),
+            icon: Icon(Icons.compare_arrows_rounded),
           ),
         ],
       ),
