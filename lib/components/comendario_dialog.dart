@@ -1,4 +1,4 @@
-import 'package:barbearia/components/comentario.dart';
+import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/comentario_services.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -33,15 +33,18 @@ Future<dynamic> showDialogComentario(BuildContext context,
             ),
             ElevatedButton(
               onPressed: () {
-                Comentario comentario = Comentario(
-                  id: Uuid().v1(),
+                String comentarioId = comentario?.id ?? Uuid().v1();
+                String comentarioData = DateTime.now().toString();
+                Comentario novoComentario = Comentario(
+                  id: comentarioId,
                   comentario: _comentarioController.text,
-                  data: DateTime.now().toString(),
+                  data: comentario?.data ?? comentarioData,
                 );
-                if (comentario != null) {
-                  comentario.id = comentario.id;
-                }
-                ComentarioServices().AddComentario(idAgendamento: idAgendamento, comentario: comentario);
+
+                ComentarioServices().AddComentario(
+                  idAgendamento: idAgendamento,
+                  comentario: novoComentario,
+                );
                 Navigator.pop(context);
               },
               child: Text(

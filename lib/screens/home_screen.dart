@@ -1,4 +1,4 @@
-import 'package:barbearia/components/agendamento.dart';
+import 'package:barbearia/models/agendamento.dart';
 import 'package:barbearia/components/list_agendamento.dart';
 import 'package:barbearia/services/agendamento_services.dart';
 import 'package:barbearia/services/auth_services.dart';

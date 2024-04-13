@@ -1,4 +1,4 @@
-import 'package:barbearia/components/comentario.dart';
+import 'package:barbearia/models/comentario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

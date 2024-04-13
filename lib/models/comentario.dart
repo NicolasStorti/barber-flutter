@@ -18,7 +18,7 @@ class Comentario {
     return{
       "id": id,
       "comentario": comentario,
-      "data": comentario,
+      "data": data,
     };
   }
 }

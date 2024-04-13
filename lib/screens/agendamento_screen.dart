@@ -1,6 +1,6 @@
-import 'package:barbearia/components/agendamento.dart';
+import 'package:barbearia/models/agendamento.dart';
 import 'package:barbearia/components/comendario_dialog.dart';
-import 'package:barbearia/components/comentario.dart';
+import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/comentario_services.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class AgendamentoScreen extends StatelessWidget {
 
   AgendamentoScreen({Key? key, required this.agendamento}) : super(key: key);
 
-  ComentarioServices _comentarioServices = ComentarioServices();
+  final ComentarioServices _comentarioServices = ComentarioServices();
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
-import 'package:barbearia/components/agendamento.dart';
-import 'package:barbearia/components/comentario.dart';
+import 'package:barbearia/models/agendamento.dart';
+import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/agendamento_services.dart';
 import 'package:barbearia/services/comentario_services.dart';
 import 'package:flutter/cupertino.dart';
