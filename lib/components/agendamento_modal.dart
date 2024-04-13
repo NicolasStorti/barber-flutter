@@ -2,10 +2,9 @@ import 'package:barbearia/models/agendamento.dart';
 import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/agendamento_services.dart';
 import 'package:barbearia/services/comentario_services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 
 ShowModalAgendamento(BuildContext context, {Agendamento? agendamento}) {
   showModalBottomSheet(
@@ -72,8 +71,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
     );
     if (picked != null) {
       setState(() {
-        String formattedDate =
-            "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+        String formattedDate = DateFormat('dd MMMM yyyy').format(picked);
         _dataController.text = formattedDate;
       });
     }

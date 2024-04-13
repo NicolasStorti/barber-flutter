@@ -1,6 +1,7 @@
 import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/comentario_services.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 Future<dynamic> showDialogComentario(BuildContext context,
@@ -34,7 +35,7 @@ Future<dynamic> showDialogComentario(BuildContext context,
             ElevatedButton(
               onPressed: () {
                 String comentarioId = comentario?.id ?? Uuid().v1();
-                String comentarioData = DateTime.now().toString();
+                String comentarioData = DateFormat('dd MMMM yyyy').format(DateTime.now());
                 Comentario novoComentario = Comentario(
                   id: comentarioId,
                   comentario: _comentarioController.text,
