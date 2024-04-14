@@ -16,12 +16,20 @@ Future<dynamic> showDialogComentario(BuildContext context,
         }
 
         return AlertDialog(
-          title: const Text("Comente agora sobre seu agendamento!"),
+          title: const Text(
+            "Comente agora sobre seu agendamento!",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+            ),
+          ),
           content: TextFormField(
             controller: comentarioController,
             decoration: const InputDecoration(
               label: Text("Comentário"),
-              border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
             ),
             maxLines: null,
           ),

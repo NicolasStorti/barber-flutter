@@ -45,7 +45,7 @@ class ListAgendamento extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.orange[200],
+                  color: Colors.green[200],
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(22),
                       bottomRight: Radius.circular(22)),

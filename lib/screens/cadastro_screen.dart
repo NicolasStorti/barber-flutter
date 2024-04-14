@@ -23,7 +23,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro'),
+        title: const Text('Cadastro',
+          style: TextStyle(fontSize: 16),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -59,7 +61,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     controller: _nomeController,
                     decoration: const InputDecoration(
                       labelText: 'Nome Completo',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -73,7 +77,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     controller: _emailController,
                     decoration: const InputDecoration(
                       labelText: 'E-mail',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -88,7 +94,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       labelText: 'Senha',
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {

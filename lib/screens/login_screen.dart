@@ -40,7 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Barber App',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -51,7 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: _emailController,
                           decoration: InputDecoration(
                             labelText: 'E-mail',
-                            border: OutlineInputBorder(),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                              ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -65,7 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: 'Senha',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {

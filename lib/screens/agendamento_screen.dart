@@ -14,7 +14,7 @@ class AgendamentoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
+      backgroundColor: Colors.green,
       appBar: AppBar(
         title: Column(
           children: [
