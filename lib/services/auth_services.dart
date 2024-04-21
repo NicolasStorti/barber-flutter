@@ -30,7 +30,10 @@ class AuthServices {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: senha);
       return null;
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      if (e.code == "user-not-found" || e.code == "wrong-password") {
+        return "Email ou senha incorretos!";
+      }
+      return "Email ou senha incorretos!";
     }
   }
 
