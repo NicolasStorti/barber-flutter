@@ -57,7 +57,8 @@ class ListAgendamento extends StatelessWidget {
                     "Data: ${agendamento.data} - Hora: ${agendamento.hora}",
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ),
               ),
@@ -93,6 +94,10 @@ class ListAgendamento extends StatelessWidget {
                               SnackBar snackBar = SnackBar(
                                 content: Text(
                                     "Deseja remover o agendamento de ${agendamento.servico}?"),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(18))),
+                                duration: const Duration(seconds: 4),
                                 action: SnackBarAction(
                                   label: "Remover",
                                   textColor: Colors.white,
@@ -121,7 +126,8 @@ class ListAgendamento extends StatelessWidget {
                         child: Text(
                           "Barbeiro: ${agendamento.barbeiro}",
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 12),
                         ),
                       )
                     ],
