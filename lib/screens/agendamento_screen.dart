@@ -121,11 +121,9 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // Exibir a imagem enviada pelo usuário, se existir
                     _imagemEnviada != null
-                        ? Image.file(_imagemEnviada!, width: 100, height: 100) // Supondo que _imagemEnviada seja o File da imagem enviada
-                        : Container(), // Se nenhuma imagem foi enviada, mostrar um container vazio
-                    // Verificar se não há imagem enviada e exibir os botões de acordo
+                        ? Image.file(_imagemEnviada!, width: 350, height: 250)
+                        : Container(),
                     if (_imagemEnviada == null)
                       ElevatedButton(
                         onPressed: () => _enviarFoto(context),
