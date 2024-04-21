@@ -44,8 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage("assets/perfil.jpg"),
+              currentAccountPicture: const  CircleAvatar(
+                backgroundColor: Colors.grey,
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 65,
+                ),
               ),
               accountName: Text((widget.user.displayName != null)
                   ? widget.user.displayName!
