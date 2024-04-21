@@ -52,6 +52,17 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
 
   final AgendamentoServices _agendamentoServices = AgendamentoServices();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   @override
   void initState() {
     if (widget.agendamento != null) {
@@ -97,6 +108,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
         padding: const EdgeInsets.all(32),
         height: MediaQuery.of(context).size.height * 0.9,
         child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -134,13 +146,17 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                         height: 20,
                       ),
                       DropdownButtonFormField<String>(
-                        value: _barbeiroController.text.isNotEmpty
-                            ? _barbeiroController.text
-                            : null,
+                        value: _barbeiroController.text.isNotEmpty ? _barbeiroController.text : null,
                         onChanged: (String? newValue) {
                           setState(() {
                             _barbeiroController.text = newValue ?? '';
                           });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, selecione um barbeiro.';
+                          }
+                          return null;
                         },
                         items: <String>[
                           'Nicolas',
@@ -164,13 +180,17 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                         height: 25,
                       ),
                       DropdownButtonFormField<String>(
-                        value: _servicoController.text.isNotEmpty
-                            ? _servicoController.text
-                            : null,
+                        value: _servicoController.text.isNotEmpty ? _servicoController.text : null,
                         onChanged: (String? newValue) {
                           setState(() {
                             _servicoController.text = newValue ?? '';
                           });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, selecione um serviço.';
+                          }
+                          return null;
                         },
                         items: <String>[
                           'Corte',
@@ -204,6 +224,12 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                                   borderRadius: BorderRadius.all(Radius.circular(30)),
                                 ),
                               ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, selecione uma data.';
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           IconButton(
@@ -226,6 +252,12 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                                   borderRadius: BorderRadius.all(Radius.circular(30)),
                                 ),
                               ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, selecione uma hora.';
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           IconButton(
@@ -244,7 +276,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
                             TextFormField(
                               controller: _comentarioController,
                               decoration: const InputDecoration(
-                                  labelText: 'Comentário',
+                                labelText: 'Comentário',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(30)),
                                 ),
@@ -264,19 +296,23 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  agendarHorario();
+                  if (_formKey.currentState!.validate()) {
+                    agendarHorario();
+                  } else {
+                    _showErrorSnackBar("Por favor, corrija os campos em vermelho.");
+                  }
                 },
                 child: (isCarregando)
                     ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                        ),
-                      )
+                  height: 16,
+                  width: 16,
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                )
                     : Text((widget.agendamento != null)
-                        ? "Editar Agendamento"
-                        : "Agendar"),
+                    ? "Editar Agendamento"
+                    : "Agendar"),
               ),
             ],
           ),
@@ -311,8 +347,8 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
           );
           ComentarioServices()
               .addComentario(
-                  idAgendamento: widget.agendamento!.id,
-                  comentario: comentarioObj)
+              idAgendamento: widget.agendamento!.id,
+              comentario: comentarioObj)
               .then((value) {
             setState(() {
               isCarregando = false;
@@ -345,7 +381,7 @@ class _AgendamentoModalState extends State<AgendamentoModal> {
               ));
           ComentarioServices()
               .addComentario(
-                  idAgendamento: agendamento.id, comentario: comentarioObj)
+              idAgendamento: agendamento.id, comentario: comentarioObj)
               .then((value) {
             setState(() {
               isCarregando = false;

@@ -161,9 +161,19 @@ class AgendamentoScreen extends StatelessWidget {
                                       color: Colors.red,
                                     ),
                                     onPressed: () {
-                                      _comentarioServices.removerComentario(
-                                          agendamentoId: agendamento.id,
-                                          comentarioId: comentarioAgora.id);
+                                      SnackBar snackBar = SnackBar(
+                                          content: Text("Deseja remover o comentário de ${comentarioAgora.comentario}?"),
+                                        action: SnackBarAction(
+                                          label: "Remover",
+                                          textColor: Colors.white,
+                                          onPressed: (){
+                                            _comentarioServices.removerComentario(
+                                                agendamentoId: agendamento.id,
+                                                comentarioId: comentarioAgora.id);
+                                          },
+                                        ),
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                     },
                                   ),
                                 ],
