@@ -128,7 +128,10 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                       return imageUrl.isNotEmpty
                           ? Column(
                         children: [
-                          Image.network(imageUrl),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Image.network(imageUrl),
+                          ),
                           const SizedBox(height: 20),
                         ],
                       )
