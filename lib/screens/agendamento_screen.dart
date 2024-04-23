@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:barbearia/models/agendamento.dart';
 import 'package:barbearia/components/comendario_dialog.dart';
 import 'package:barbearia/models/comentario.dart';
@@ -6,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:barbearia/services/image_services.dart';
 
 class AgendamentoScreen extends StatefulWidget {
@@ -19,11 +19,16 @@ class AgendamentoScreen extends StatefulWidget {
 }
 
 class _AgendamentoScreenState extends State<AgendamentoScreen> {
-  File? _imagemEnviada;
-
+  late File? _imagemEnviada = null; // Inicializando como null
   final ComentarioServices _comentarioServices = ComentarioServices();
   final ImageServices _imageServices = ImageServices();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> _imageStream;
+  @override
+  void initState() {
+    super.initState();
+    _imageStream = _imageServices.connectStreamImages(idAgendamento: widget.agendamento.id);
+  }
 
   Future<void> _enviarFoto(BuildContext context) async {
     final picker = ImagePicker();
@@ -35,14 +40,10 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
 
       File imageFile = File(pickedFile.path);
       try {
-        String imageUrl = await _imageServices.enviarFoto(imageFile);
-
-        String? userId = FirebaseAuth.instance.currentUser?.uid;
-
-        await _firestore.collection('imagens').add({
-          'url': imageUrl,
-          'userId': userId,
-        });
+        String imageUrl = await _imageServices.addImage(
+          idAgendamento: widget.agendamento.id,
+          imageFile: imageFile,
+        );
 
         print('Imagem enviada com sucesso! URL: $imageUrl');
       } catch (e) {
@@ -61,18 +62,14 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
 
       File imageFile = File(pickedFile.path);
       try {
-        String imageUrl = await _imageServices.enviarFoto(imageFile);
+        String imageUrl = await _imageServices.addImage(
+          idAgendamento: widget.agendamento.id,
+          imageFile: imageFile,
+        );
 
-        String? userId = FirebaseAuth.instance.currentUser?.uid;
-
-        await _firestore.collection('imagens').add({
-          'url': imageUrl,
-          'userId': userId,
-        });
-
-        print('Imagem enviada com sucesso! URL: $imageUrl');
+        print('Imagem tirada com sucesso! URL: $imageUrl');
       } catch (e) {
-        print('Erro ao enviar imagem: $e');
+        print('Erro ao tirar imagem: $e');
       }
     }
   }
@@ -116,14 +113,38 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
+              StreamBuilder(
+                stream: _imageStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.hasData &&
+                        snapshot.data != null &&
+                        snapshot.data!.docs.isNotEmpty) {
+                      final imageUrl = snapshot.data!.docs.first['imageUrl'];
+
+                      return imageUrl.isNotEmpty
+                          ? Column(
+                        children: [
+                          Image.network(imageUrl),
+                          const SizedBox(height: 20),
+                        ],
+                      )
+                          : const SizedBox();
+                    } else {
+                      return const SizedBox();
+                    }
+                  }
+                },
+              ),
               SizedBox(
                 height: 250,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _imagemEnviada != null
-                        ? Image.file(_imagemEnviada!, width: 350, height: 250)
-                        : Container(),
                     if (_imagemEnviada == null)
                       ElevatedButton(
                         onPressed: () => _enviarFoto(context),
@@ -184,85 +205,83 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                 ),
               ),
               StreamBuilder(
-                  stream: _comentarioServices.connectStreamComentario(
-                      idAgendamento: widget.agendamento.id),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                stream: _comentarioServices.connectStreamComentario(
+                  idAgendamento: widget.agendamento.id,
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.hasData &&
+                        snapshot.data != null &&
+                        snapshot.data!.docs.isNotEmpty) {
+                      final List<Comentario> listaComentarios = [];
+
+                      for (var doc in snapshot.data!.docs) {
+                        listaComentarios.add(Comentario.fromMap(doc.data()));
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:
+                        List.generate(listaComentarios.length, (index) {
+                          Comentario comentarioAgora = listaComentarios[index];
+                          return ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(comentarioAgora.comentario),
+                            subtitle: Text(comentarioAgora.data),
+                            leading: const Icon(Icons.double_arrow),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    showDialogComentario(
+                                      context,
+                                      idAgendamento: widget.agendamento.id,
+                                      comentario: comentarioAgora,
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    SnackBar snackBar = SnackBar(
+                                      content: Text(
+                                          "Deseja remover o comentário de ${comentarioAgora.comentario}?"),
+                                      action: SnackBarAction(
+                                        label: "Remover",
+                                        textColor: Colors.white,
+                                        onPressed: () {
+                                          _comentarioServices.removerComentario(
+                                            agendamentoId: widget.agendamento.id,
+                                            comentarioId: comentarioAgora.id,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                       );
                     } else {
-                      if (snapshot.hasData &&
-                          snapshot.data != null &&
-                          snapshot.data!.docs.isNotEmpty) {
-                        final List<Comentario> listaComentarios = [];
-
-                        for (var doc in snapshot.data!.docs) {
-                          listaComentarios.add(Comentario.fromMap(doc.data()));
-                        }
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:
-                          List.generate(listaComentarios.length, (index) {
-                            Comentario comentarioAgora =
-                            listaComentarios[index];
-                            return ListTile(
-                              dense: true,
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(comentarioAgora.comentario),
-                              subtitle: Text(comentarioAgora.data),
-                              leading: const Icon(Icons.double_arrow),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      showDialogComentario(
-                                        context,
-                                        idAgendamento: widget.agendamento.id,
-                                        comentario: comentarioAgora,
-                                      );
-                                    },
-                                    icon: const Icon(Icons.edit),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      SnackBar snackBar = SnackBar(
-                                        content: Text(
-                                            "Deseja remover o comentário de ${comentarioAgora.comentario}?"),
-                                        action: SnackBarAction(
-                                          label: "Remover",
-                                          textColor: Colors.white,
-                                          onPressed: () {
-                                            _comentarioServices
-                                                .removerComentario(
-                                              agendamentoId:
-                                              widget.agendamento.id,
-                                              comentarioId:
-                                              comentarioAgora.id,
-                                            );
-                                          },
-                                        ),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                        );
-                      } else {
-                        return const Text("Nenhum Comentário!");
-                      }
+                      return const Text("Nenhum Comentário!");
                     }
-                  }),
+                  }
+                },
+              ),
             ],
           ),
         ),
