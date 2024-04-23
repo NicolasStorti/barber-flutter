@@ -4,7 +4,6 @@ import 'package:barbearia/components/comendario_dialog.dart';
 import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/comentario_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:barbearia/services/image_services.dart';
@@ -12,21 +11,21 @@ import 'package:barbearia/services/image_services.dart';
 class AgendamentoScreen extends StatefulWidget {
   final Agendamento agendamento;
 
-  AgendamentoScreen({Key? key, required this.agendamento}) : super(key: key);
+  const AgendamentoScreen({super.key, required this.agendamento});
 
   @override
   _AgendamentoScreenState createState() => _AgendamentoScreenState();
 }
 
 class _AgendamentoScreenState extends State<AgendamentoScreen> {
-  late File? _imagemEnviada = null; // Inicializando como null
+  late File? _imagemEnviada;
   final ComentarioServices _comentarioServices = ComentarioServices();
   final ImageServices _imageServices = ImageServices();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late Stream<QuerySnapshot<Map<String, dynamic>>> _imageStream;
   @override
   void initState() {
     super.initState();
+    _imagemEnviada = null;
     _imageStream = _imageServices.connectStreamImages(idAgendamento: widget.agendamento.id);
   }
 
@@ -140,22 +139,23 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                   }
                 },
               ),
-              SizedBox(
-                height: 250,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    if (_imagemEnviada == null)
+              Visibility(
+                visible: _imagemEnviada == null,
+                child: SizedBox(
+                  height: 250,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
                       ElevatedButton(
                         onPressed: () => _enviarFoto(context),
                         child: const Text("Enviar Foto"),
                       ),
-                    if (_imagemEnviada == null)
                       ElevatedButton(
                         onPressed: () => _tirarFoto(context),
                         child: const Text("Tirar Foto"),
                       ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
