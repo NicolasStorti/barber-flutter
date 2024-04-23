@@ -1,16 +1,60 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 import 'package:barbearia/components/snackbar.dart';
 import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/comentario_services.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
+import 'package:barbearia/services/image_services.dart';
 
 Future<dynamic> showDialogComentario(BuildContext context,
-    {required String idAgendamento, Comentario? comentario}) {
+    {required String idAgendamento, Comentario? comentario, required ImageServices imageServices}) {
   TextEditingController comentarioController = TextEditingController();
+  late File? _imagemEnviada;
 
-  if (comentario != null) {
-    comentarioController.text = comentario.comentario;
+  Future<void> _enviarFoto() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // setState(() {
+      _imagemEnviada = File(pickedFile.path);
+      // });
+
+      File imageFile = File(pickedFile.path);
+      try {
+        String imageUrl = await imageServices.addImage(
+          idAgendamento: idAgendamento,
+          imageFile: imageFile,
+        );
+
+        print('Imagem enviada com sucesso! URL: $imageUrl');
+      } catch (e) {
+        print('Erro ao enviar imagem: $e');
+      }
+    }
+  }
+
+  Future<void> _tirarFoto() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      // setState(() {
+      _imagemEnviada = File(pickedFile.path);
+      // });
+
+      File imageFile = File(pickedFile.path);
+      try {
+        String imageUrl = await imageServices.addImage(
+          idAgendamento: idAgendamento,
+          imageFile: imageFile,
+        );
+
+        print('Imagem tirada com sucesso! URL: $imageUrl');
+      } catch (e) {
+        print('Erro ao tirar imagem: $e');
+      }
+    }
   }
 
   return showDialog(
@@ -24,21 +68,40 @@ Future<dynamic> showDialogComentario(BuildContext context,
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: TextFormField(
-          controller: comentarioController,
-          decoration: const InputDecoration(
-            labelText: 'Comentário',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: comentarioController,
+              decoration: const InputDecoration(
+                labelText: 'Comentário',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+              ),
+              maxLines: null,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Por favor, insira um comentário.';
+                }
+                return null;
+              },
             ),
-          ),
-          maxLines: null,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Por favor, insira um comentário.';
-            }
-            return null;
-          },
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: _enviarFoto,
+                  child: const Text("Enviar Foto"),
+                ),
+                ElevatedButton(
+                  onPressed: _tirarFoto,
+                  child: const Text("Tirar Foto"),
+                ),
+              ],
+            ),
+          ],
         ),
         actions: [
           TextButton(

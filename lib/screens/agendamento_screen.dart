@@ -3,15 +3,16 @@ import 'package:barbearia/models/agendamento.dart';
 import 'package:barbearia/components/comendario_dialog.dart';
 import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/comentario_services.dart';
+import 'package:barbearia/services/image_services.dart'; // Importe adicionado para _imageServices
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:barbearia/services/image_services.dart';
 
 class AgendamentoScreen extends StatefulWidget {
   final Agendamento agendamento;
 
-  const AgendamentoScreen({super.key, required this.agendamento});
+  const AgendamentoScreen({Key? key, required this.agendamento})
+      : super(key: key);
 
   @override
   _AgendamentoScreenState createState() => _AgendamentoScreenState();
@@ -20,13 +21,16 @@ class AgendamentoScreen extends StatefulWidget {
 class _AgendamentoScreenState extends State<AgendamentoScreen> {
   late File? _imagemEnviada;
   final ComentarioServices _comentarioServices = ComentarioServices();
-  final ImageServices _imageServices = ImageServices();
+  final ImageServices _imageServices =
+      ImageServices(); // Instância de ImageServices adicionada
   late Stream<QuerySnapshot<Map<String, dynamic>>> _imageStream;
+
   @override
   void initState() {
     super.initState();
     _imagemEnviada = null;
-    _imageStream = _imageServices.connectStreamImages(idAgendamento: widget.agendamento.id);
+    _imageStream = _imageServices.connectStreamImages(
+        idAgendamento: widget.agendamento.id);
   }
 
   Future<void> _enviarFoto(BuildContext context) async {
@@ -47,28 +51,6 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
         print('Imagem enviada com sucesso! URL: $imageUrl');
       } catch (e) {
         print('Erro ao enviar imagem: $e');
-      }
-    }
-  }
-
-  Future<void> _tirarFoto(BuildContext context) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      setState(() {
-        _imagemEnviada = File(pickedFile.path);
-      });
-
-      File imageFile = File(pickedFile.path);
-      try {
-        String imageUrl = await _imageServices.addImage(
-          idAgendamento: widget.agendamento.id,
-          imageFile: imageFile,
-        );
-
-        print('Imagem tirada com sucesso! URL: $imageUrl');
-      } catch (e) {
-        print('Erro ao tirar imagem: $e');
       }
     }
   }
@@ -98,7 +80,9 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialogComentario(context, idAgendamento: widget.agendamento.id);
+          showDialogComentario(context,
+              idAgendamento: widget.agendamento.id,
+              imageServices: _imageServices);
         },
         child: const Icon(Icons.add),
       ),
@@ -127,39 +111,20 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
 
                       return imageUrl.isNotEmpty
                           ? Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: Image.network(imageUrl),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      )
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: Image.network(imageUrl),
+                                ),
+                                const SizedBox(height: 20),
+                              ],
+                            )
                           : const SizedBox();
                     } else {
                       return const SizedBox();
                     }
                   }
                 },
-              ),
-              Visibility(
-                visible: _imagemEnviada == null,
-                child: SizedBox(
-                  height: 250,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => _enviarFoto(context),
-                        child: const Text("Enviar Foto"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => _tirarFoto(context),
-                        child: const Text("Tirar Foto"),
-                      ),
-                    ],
-                  ),
-                ),
               ),
               const SizedBox(
                 height: 10,
@@ -229,7 +194,7 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:
-                        List.generate(listaComentarios.length, (index) {
+                            List.generate(listaComentarios.length, (index) {
                           Comentario comentarioAgora = listaComentarios[index];
                           return SizedBox(
                             width: 300,
@@ -247,7 +212,7 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                                       showDialogComentario(
                                         context,
                                         idAgendamento: widget.agendamento.id,
-                                        comentario: comentarioAgora,
+                                        comentario: comentarioAgora, imageServices: _imageServices,
                                       );
                                     },
                                     icon: const Icon(Icons.edit),
@@ -265,8 +230,10 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                                           label: "Remover",
                                           textColor: Colors.white,
                                           onPressed: () {
-                                            _comentarioServices.removerComentario(
-                                              agendamentoId: widget.agendamento.id,
+                                            _comentarioServices
+                                                .removerComentario(
+                                              agendamentoId:
+                                                  widget.agendamento.id,
                                               comentarioId: comentarioAgora.id,
                                             );
                                           },
