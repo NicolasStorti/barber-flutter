@@ -228,50 +228,53 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                         children:
                         List.generate(listaComentarios.length, (index) {
                           Comentario comentarioAgora = listaComentarios[index];
-                          return ListTile(
-                            dense: true,
-                            contentPadding: EdgeInsets.zero,
-                            title: Text(comentarioAgora.comentario),
-                            subtitle: Text(comentarioAgora.data),
-                            leading: const Icon(Icons.double_arrow),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    showDialogComentario(
-                                      context,
-                                      idAgendamento: widget.agendamento.id,
-                                      comentario: comentarioAgora,
-                                    );
-                                  },
-                                  icon: const Icon(Icons.edit),
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+                          return SizedBox(
+                            width: 300,
+                            child: ListTile(
+                              dense: true,
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(comentarioAgora.comentario),
+                              subtitle: Text(comentarioAgora.data),
+                              leading: const Icon(Icons.mode_comment),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      showDialogComentario(
+                                        context,
+                                        idAgendamento: widget.agendamento.id,
+                                        comentario: comentarioAgora,
+                                      );
+                                    },
+                                    icon: const Icon(Icons.edit),
                                   ),
-                                  onPressed: () {
-                                    SnackBar snackBar = SnackBar(
-                                      content: Text(
-                                          "Deseja remover o comentário de ${comentarioAgora.comentario}?"),
-                                      action: SnackBarAction(
-                                        label: "Remover",
-                                        textColor: Colors.white,
-                                        onPressed: () {
-                                          _comentarioServices.removerComentario(
-                                            agendamentoId: widget.agendamento.id,
-                                            comentarioId: comentarioAgora.id,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  },
-                                ),
-                              ],
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      SnackBar snackBar = SnackBar(
+                                        content: Text(
+                                            "Deseja remover o comentário de ${comentarioAgora.comentario}?"),
+                                        action: SnackBarAction(
+                                          label: "Remover",
+                                          textColor: Colors.white,
+                                          onPressed: () {
+                                            _comentarioServices.removerComentario(
+                                              agendamentoId: widget.agendamento.id,
+                                              comentarioId: comentarioAgora.id,
+                                            );
+                                          },
+                                        ),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }),
