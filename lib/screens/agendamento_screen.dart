@@ -1,12 +1,10 @@
-import 'dart:io';
 import 'package:barbearia/models/agendamento.dart';
 import 'package:barbearia/components/comendario_dialog.dart';
 import 'package:barbearia/models/comentario.dart';
 import 'package:barbearia/services/comentario_services.dart';
-import 'package:barbearia/services/image_services.dart'; // Importe adicionado para _imageServices
+import 'package:barbearia/services/image_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AgendamentoScreen extends StatefulWidget {
   final Agendamento agendamento;
@@ -19,41 +17,18 @@ class AgendamentoScreen extends StatefulWidget {
 }
 
 class _AgendamentoScreenState extends State<AgendamentoScreen> {
-  late File? _imagemEnviada;
   final ComentarioServices _comentarioServices = ComentarioServices();
   final ImageServices _imageServices =
-      ImageServices(); // Instância de ImageServices adicionada
+      ImageServices();
   late Stream<QuerySnapshot<Map<String, dynamic>>> _imageStream;
 
   @override
   void initState() {
     super.initState();
-    _imagemEnviada = null;
     _imageStream = _imageServices.connectStreamImages(
         idAgendamento: widget.agendamento.id);
   }
 
-  Future<void> _enviarFoto(BuildContext context) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imagemEnviada = File(pickedFile.path);
-      });
-
-      File imageFile = File(pickedFile.path);
-      try {
-        String imageUrl = await _imageServices.addImage(
-          idAgendamento: widget.agendamento.id,
-          imageFile: imageFile,
-        );
-
-        print('Imagem enviada com sucesso! URL: $imageUrl');
-      } catch (e) {
-        print('Erro ao enviar imagem: $e');
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

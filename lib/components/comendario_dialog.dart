@@ -11,15 +11,11 @@ import 'package:barbearia/services/image_services.dart';
 Future<dynamic> showDialogComentario(BuildContext context,
     {required String idAgendamento, Comentario? comentario, required ImageServices imageServices}) {
   TextEditingController comentarioController = TextEditingController();
-  late File? _imagemEnviada;
 
   Future<void> _enviarFoto() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      // setState(() {
-      _imagemEnviada = File(pickedFile.path);
-      // });
 
       File imageFile = File(pickedFile.path);
       try {
@@ -29,6 +25,7 @@ Future<dynamic> showDialogComentario(BuildContext context,
         );
 
         print('Imagem enviada com sucesso! URL: $imageUrl');
+        Navigator.pop(context);
       } catch (e) {
         print('Erro ao enviar imagem: $e');
       }
@@ -39,9 +36,6 @@ Future<dynamic> showDialogComentario(BuildContext context,
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      // setState(() {
-      _imagemEnviada = File(pickedFile.path);
-      // });
 
       File imageFile = File(pickedFile.path);
       try {
@@ -51,6 +45,7 @@ Future<dynamic> showDialogComentario(BuildContext context,
         );
 
         print('Imagem tirada com sucesso! URL: $imageUrl');
+        Navigator.pop(context);
       } catch (e) {
         print('Erro ao tirar imagem: $e');
       }
@@ -88,16 +83,28 @@ Future<dynamic> showDialogComentario(BuildContext context,
               },
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Text(
+              "Você deseja enviar ou tirar uma foto?",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Column(
               children: [
-                ElevatedButton(
-                  onPressed: _enviarFoto,
-                  child: const Text("Enviar Foto"),
-                ),
-                ElevatedButton(
-                  onPressed: _tirarFoto,
-                  child: const Text("Tirar Foto"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _enviarFoto,
+                      child: const Text("Enviar Foto"),
+                    ),
+                    ElevatedButton(
+                      onPressed: _tirarFoto,
+                      child: const Text("Tirar Foto"),
+                    ),
+                  ],
                 ),
               ],
             ),
