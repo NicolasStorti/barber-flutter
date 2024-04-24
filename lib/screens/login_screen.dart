@@ -16,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
-  AuthServices _authUser = AuthServices();
+  final AuthServices _authUser = AuthServices();
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +30,14 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Container(
                   height: 130,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/logo.png'),
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   'Barber App',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       TextFormField(
                           controller: _emailController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'E-mail',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -64,11 +64,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                             return null;
                           }),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
                           controller: _senhaController,
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Senha',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -79,19 +79,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               return 'Por favor, insira sua senha.';
                             }
                             if (value.length < 6) {
-                              return 'A senha deve ter pelo menos 6 caracteres.';
+                              return 'Senha inválida';
                             }
                             return null;
                           }),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () => onButtonEntrarClicked(context),
-                        child: Text('Entrar'),
+                        child: const Text('Entrar'),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       TextButton(
                         onPressed: () => onButtonCadastroClicked(context),
-                        child: Text('Cadastre-se aqui'),
+                        child: const Text('Cadastre-se aqui'),
                       ),
                     ],
                   ),
@@ -118,6 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onButtonCadastroClicked(BuildContext context) {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CadastroScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CadastroScreen()));
   }
 }

@@ -9,11 +9,10 @@ import 'package:flutter/material.dart';
 class AgendamentoScreen extends StatefulWidget {
   final Agendamento agendamento;
 
-  const AgendamentoScreen({Key? key, required this.agendamento})
-      : super(key: key);
+  const AgendamentoScreen({super.key, required this.agendamento});
 
   @override
-  _AgendamentoScreenState createState() => _AgendamentoScreenState();
+  State<AgendamentoScreen> createState() => _AgendamentoScreenState();
 }
 
 class _AgendamentoScreenState extends State<AgendamentoScreen> {

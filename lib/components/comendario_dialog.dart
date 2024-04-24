@@ -12,7 +12,7 @@ Future<dynamic> showDialogComentario(BuildContext context,
     {required String idAgendamento, Comentario? comentario, required ImageServices imageServices}) {
   TextEditingController comentarioController = TextEditingController();
 
-  Future<void> _enviarFoto() async {
+  Future<void> enviarFoto() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -32,7 +32,7 @@ Future<dynamic> showDialogComentario(BuildContext context,
     }
   }
 
-  Future<void> _tirarFoto() async {
+  Future<void> tirarFoto() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
@@ -97,11 +97,11 @@ Future<dynamic> showDialogComentario(BuildContext context,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                      onPressed: _enviarFoto,
+                      onPressed: enviarFoto,
                       child: const Text("Enviar Foto"),
                     ),
                     ElevatedButton(
-                      onPressed: _tirarFoto,
+                      onPressed: tirarFoto,
                       child: const Text("Tirar Foto"),
                     ),
                   ],
