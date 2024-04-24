@@ -171,7 +171,7 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                             List.generate(listaComentarios.length, (index) {
                           Comentario comentarioAgora = listaComentarios[index];
                           return SizedBox(
-                            width: 300,
+                            width: 310,
                             child: ListTile(
                               dense: true,
                               contentPadding: EdgeInsets.zero,
