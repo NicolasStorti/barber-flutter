@@ -25,6 +25,18 @@ C:\Users\User\AppData\Local\Pub\Cache\bin
 ```
 ou substitua `User` pelo nome do seu usuário.
 
+## Instalando o FlutterFire CLI
+Instale a CLI do FlutterFire globalmente com o comando:
+```
+dart pub global activate flutterfire_cli
+```
+
+## Permissões do CLI
+Para permitir o acesso ao CLI, execute o seguinte comando no PowerShell:
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
 ## Login no Firebase
 Execute o comando abaixo para fazer login no Firebase:
 ```
@@ -35,19 +47,6 @@ firebase login
 Verifique seus projetos Firebase com o comando:
 ```
 firebase projects:list
-```
-
-## Permissões do CLI
-Para permitir o acesso ao CLI, execute o seguinte comando no PowerShell:
-```
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
-
-
-## Instalando o FlutterFire CLI
-Instale a CLI do FlutterFire globalmente com o comando:
-```
-dart pub global activate flutterfire_cli
 ```
 
 ## Configurando o Projeto
